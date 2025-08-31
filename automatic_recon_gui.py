@@ -10,18 +10,14 @@ import datetime
 import tempfile
 from fpdf import FPDF
 from bs4 import BeautifulSoup
-from tkinter import Tk, Canvas, Entry, Button, Text, Scrollbar, messagebox
-from PIL import Image, ImageTk
+from tkinter import Tk, Canvas, Entry, Button, Text, Scrollbar, messagebox, simpledialog
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
+from email.message import EmailMessage
 
 # -------------------- DIRECTORIES --------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 RESULTS_DIR = os.path.join(OUTPUT_DIR, "results")
 SCREENSHOTS_DIR = os.path.join(OUTPUT_DIR, "screenshots")
@@ -119,12 +115,15 @@ def take_screenshot(domain):
         options.add_argument("--headless")
         options.add_argument("--window-size=1920x1080")
         driver = webdriver.Chrome(options=options)
-        driver.get(f"http://{domain}")
-        path = os.path.join(SCREENSHOTS_DIR,f"{domain}.png")
+        driver.get(f"https://{domain}")  # HTTPS ensures better success
+        path = os.path.join(SCREENSHOTS_DIR, f"{domain}.png")
         driver.save_screenshot(path)
         driver.quit()
+        print(f"[+] Screenshot saved: {path}")
         return path
-    except: return None
+    except Exception as e:
+        print(f"[!] Screenshot failed: {e}")
+        return None
 
 def hacker_target_api(domain, service="subnet"):
     try:
@@ -147,6 +146,27 @@ def write_report_pdf(domain, content, screenshot_path=None):
     pdf.output(pdf_path)
     return pdf_path
 
+def send_email_with_report(pdf_path, recipient_email):
+    try:
+        smtp_server = simpledialog.askstring("SMTP Server","Enter SMTP server (e.g., smtp.gmail.com):")
+        smtp_port = int(simpledialog.askstring("SMTP Port","Enter SMTP port (e.g., 465):"))
+        sender_email = simpledialog.askstring("Sender Email","Enter your email address:")
+        password = simpledialog.askstring("Password","Enter your email password or app-specific password:",show="*")
+        msg = EmailMessage()
+        msg['Subject'] = "Recon Report"
+        msg['From'] = sender_email
+        msg['To'] = recipient_email
+        msg.set_content(f"Attached is the reconnaissance report for {os.path.basename(pdf_path)}")
+        with open(pdf_path,'rb') as f:
+            msg.add_attachment(f.read(), maintype='application',subtype='pdf',filename=os.path.basename(pdf_path))
+        with smtplib.SMTP_SSL(smtp_server,smtp_port) as smtp:
+            smtp.login(sender_email,password)
+            smtp.send_message(msg)
+        return True
+    except Exception as e:
+        print(f"[!] Email sending failed: {e}")
+        return False
+
 # -------------------- GUI --------------------
 class ReconApp:
     def __init__(self, root):
@@ -154,7 +174,7 @@ class ReconApp:
         self.root.title("AUTOMATED RECON TOOL")
         self.root.geometry("900x650")
         self.root.resizable(False,False)
-        self.canvas = Canvas(self.root,width=900,height=650)
+        self.canvas = Canvas(self.root,width=900,height=650,bg="black")
         self.canvas.pack(fill="both",expand=True)
 
         self.canvas.create_text(450,40,text="AUTOMATED RECON TOOL",font=("Arial",24,"bold"),fill="#00FF00")
@@ -267,6 +287,13 @@ class ReconApp:
             self.log("=== PDF Report ===")
             pdf_path = write_report_pdf(domain,self.output_text.get("1.0","end"),screenshot)
             self.log(f"PDF saved at: {pdf_path}\n")
+
+            # Ask user if they want to send email
+            if messagebox.askyesno("Email Report","Do you want to email the report?"):
+                recipient = simpledialog.askstring("Recipient Email","Enter recipient email:")
+                if recipient:
+                    success = send_email_with_report(pdf_path, recipient)
+                    self.log("[✓] Email sent successfully." if success else "[!] Email sending failed.")
 
             self.log("[✓] Recon complete.")
 
