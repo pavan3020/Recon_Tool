@@ -1,52 +1,94 @@
-1. Project Title & Description
+# Supraja Project: Automated Recon Tool
 
-Title: Automated Recon Tool
+**Automatic Reconnaissance with Python** is a GUI-based OSINT and penetration testing tool designed for cybersecurity enthusiasts, students, and professionals. It gathers information about a target domain using local recon methods and external APIs, generates detailed PDF reports, and can optionally send them via email.
 
-Description: A Python GUI-based OSINT and penetration testing tool for gathering information on a target domain, generating PDF reports, and optionally sending email reports.
+---
 
-2. Features / Enhancements
+## Features
 
-List the main functionalities clearly:
+- **GUI – Simulation Tool**
+  - Interactive Tkinter interface.
+  - Buttons for Start Recon, Clear Output, and Project Info.
+  - Real-time log display of reconnaissance results.
 
-GUI – Interactive interface with Start/Clear/Project Info buttons.
+- **Infogathering Using OSINT**
+  - Domain IP & Geolocation
+  - WHOIS information
+  - DNS records (A, AAAA, MX, NS, TXT)
+  - HTTP headers
+  - SSL certificate information
+  - Admin panel brute-force checking
+  - HTML meta tag scraping
+  - Technology stack detection
 
-OSINT Infogathering: IP, Geolocation, Whois, DNS, HTTP headers, SSL info, Admin panel paths, HTML meta tags, Tech stack.
+- **Tools API Integration**
+  - Uses [HackerTarget APIs](https://hackertarget.com) for:
+    - DNS Lookup
+    - Reverse IP Lookup
+    - Traceroute
+    - Subdomain Enumeration
 
-HackerTarget API integration: DNS Lookup, Reverse IP, Traceroute, Subdomain enumeration.
+- **PDF Report Generation**
+  - Generates detailed PDF reports of all reconnaissance activities.
+  - Saved in `output/results/`.
 
-Generate PDF reports with full reconnaissance details.
+- **Automatic Email Function**
+  - Optionally send PDF reports via SMTP.
 
-Optional email sending of PDF reports.
+- **Installable EXE**
+  - Can be converted into a standalone Windows executable using PyInstaller.
 
-Can be packaged as a standalone EXE.
+---
 
-3. Installation Instructions
+## Installation
 
-Clone the repo.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/pavan3020/Supraja_project.git
+   cd Supraja_project
+Create and activate a virtual environment (optional but recommended):
 
-Create and activate a Python virtual environment (optional).
+bash
+Copy code
+python -m venv venv
+venv\Scripts\activate   # Windows
+source venv/bin/activate # Linux/Mac
+Install dependencies:
 
-Install dependencies via pip install -r requirements.txt.
+bash
+Copy code
+pip install -r requirements.txt
+Chrome WebDriver
 
-Download ChromeDriver for Selenium.
+Download ChromeDriver matching your Chrome version.
 
-4. Usage
+Place it in the project folder or add to your system PATH.
 
-Run the Python GUI script: python automatic_recon_gui.py.
+Usage
+Run the GUI:
 
-Enter the target domain and click Start Recon.
+bash
+Copy code
+python automatic_recon_gui.py
+Enter the target domain (e.g., example.com) and click Start Recon.
 
-View results in GUI, screenshots in output/screenshots, and PDF reports in output/results.
+View logs in GUI.
 
-Optionally, configure email to send PDF reports automatically.
+PDF reports are saved in output/results/.
 
-5. Folder Structure
-Recon_Tool/
+Screenshots are saved in output/screenshots/.
+
+Configure email in the script to send reports automatically.
+
+Folder Structure
+bash
+Copy code
+Supraja_project/
 │
-├─ assets/                # GUI assets (icons, background)
+├─ assets/                # GUI assets (icons, backgrounds)
 ├─ output/
 │   ├─ results/           # PDF reports
 │   └─ screenshots/       # Website screenshots
-├─ automatic_recon_gui.py # Main Python GUI script
+├─ automatic_recon_gui.py # Main GUI script
 ├─ requirements.txt       # Python dependencies
 └─ README.md              # This file
