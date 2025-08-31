@@ -1,4 +1,4 @@
-# Supraja Project: Automated Recon Tool
+# Automated Recon Tool
 
 **Automatic Reconnaissance with Python** is a GUI-based OSINT and penetration testing tool designed for cybersecurity enthusiasts, students, and professionals. It gathers information about a target domain using local recon methods and external APIs, generates detailed PDF reports, and can optionally send them via email.
 
@@ -46,43 +46,45 @@
    ```bash
    git clone https://github.com/pavan3020/Supraja_project.git
    cd Supraja_project
-Create and activate a virtual environment (optional but recommended):
+   ```
 
-bash
-Copy code
-python -m venv venv
-venv\Scripts\activate   # Windows
-source venv/bin/activate # Linux/Mac
-Install dependencies:
+2. Create and activate a virtual environment (optional but recommended):
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate   # Windows
+   source venv/bin/activate # Linux/Mac
+   ```
 
-bash
-Copy code
-pip install -r requirements.txt
-Chrome WebDriver
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Download ChromeDriver matching your Chrome version.
+4. **Chrome WebDriver**
+   - Download [ChromeDriver](https://sites.google.com/chromium.org/driver/) matching your Chrome version.
+   - Place it in the project folder or add to your system PATH.
 
-Place it in the project folder or add to your system PATH.
+---
 
-Usage
-Run the GUI:
+## Usage
 
-bash
-Copy code
-python automatic_recon_gui.py
-Enter the target domain (e.g., example.com) and click Start Recon.
+1. Run the GUI:
+   ```bash
+   python automatic_recon_gui.py
+   ```
 
-View logs in GUI.
+2. Enter the target domain (e.g., `example.com`) and click **Start Recon**.  
 
-PDF reports are saved in output/results/.
+3. View logs in GUI.  
+4. PDF reports are saved in `output/results/`.  
+5. Screenshots are saved in `output/screenshots/`.  
+6. Configure email in the script to send reports automatically.
 
-Screenshots are saved in output/screenshots/.
+---
 
-Configure email in the script to send reports automatically.
+## Folder Structure
 
-Folder Structure
-bash
-Copy code
+```
 Supraja_project/
 │
 ├─ assets/                # GUI assets (icons, backgrounds)
@@ -92,3 +94,10 @@ Supraja_project/
 ├─ automatic_recon_gui.py # Main GUI script
 ├─ requirements.txt       # Python dependencies
 └─ README.md              # This file
+```
+
+---
+
+## License
+
+Add your preferred license here (e.g., MIT License)
